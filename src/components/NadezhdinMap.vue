@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import type { Region } from '../main'
 
 import MapSvg from '../assets/Map.svg'
@@ -7,11 +7,10 @@ import { regionsMap } from '../utils/regionMapping'
 import { vSvgPanZoom } from '../utils/svgpanzoom'
 
 const map = ref()
-const root = ref()
-const hover = ref()
+const root = ref<HTMLDivElement>()
+const hover = ref<HTMLDivElement>()
 const hoverItem = ref<{ count: number, name: string, percent: number }>()
-const hoverTop = ref<number>()
-const hoverLeft = ref<number>()
+const hoverStyle = ref<{ top?: string, right?: string, bottom?: string, left?: string }>()
 const showBorder = ref<boolean>(false)
 
 const props = withDefaults(
@@ -68,10 +67,25 @@ function renderMap () {
       regionOnMap.setAttribute('style', 'fill: var(--cyan)')
     }
 
-    regionOnMap.addEventListener('mousemove', e => {
+    regionOnMap.addEventListener('mousemove', async e => {  
       hoverItem.value = { name, count, percent }
-      hoverTop.value = e.offsetY + 16
-      hoverLeft.value = e.offsetX
+      hoverStyle.value = {
+        top: `${e.offsetY + 16}px`,
+        left: `${e.offsetX}px`
+      }
+
+      await nextTick()
+
+      const rect = hover.value?.getBoundingClientRect()
+      if (rect?.right && rect.right > window.innerWidth) {
+        hoverStyle.value.right = '0px'
+        hoverStyle.value.left = undefined
+      }
+
+      if (rect?.bottom && rect.bottom > window.innerHeight) {
+        hoverStyle.value.bottom = '0px'
+        hoverStyle.value.top = undefined
+      }
     })
   }
 }
@@ -105,7 +119,7 @@ function renderMap () {
     <div
       class="nadezhdin-map-hover"
       v-show="hoverItem"
-      :style="{ top: `${hoverTop ?? 0}px`, left: `${hoverLeft ?? 0}px` }"
+      :style="hoverStyle"
       ref="hover"
     >
       <template v-if="hoverItem">
@@ -125,24 +139,25 @@ function renderMap () {
 .nadezhdin-map {
   width: 100%;
   height: 100%;
+  position: relative;
 
   --cyan: #3A91C0;
   --blue: #3B66FF;
   --grey: #F2F2F2;
 
-  position: relative;
-  border-radius: 16px;
-  border: 2px solid transparent;
-  transition: border-color 0.3s ease;
-
-  &_show-border {
-    border-color: #DDD;
+  @media screen and (max-width: 960px) {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 16px;
   }
 
   svg {
     width: 100%;
     height: 100%;
+
     border-radius: 16px;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
 
     path {
       stroke: #FFFFFF;
@@ -155,10 +170,17 @@ function renderMap () {
       transition: fill 0.2s;
     }
   }
+
+  &_show-border svg {
+    border-color: #DDD;
+  }
 }
 
 .nadezhdin-map-legend {
-  position: absolute;
+  @media screen and (min-width: 960px) {
+    position: absolute;
+  }
+
   top: 16px;
   left: 16px;
 

@@ -80,15 +80,7 @@ export const vSvgPanZoom = async function (el: SVGSVGElement, binding: Directive
 
   function toggle (enable: boolean) {
     if (hammer) hammer.set({ enable })
-    if (!enable) {
-      instance.disableDblClickZoom()
-      instance.disableMouseWheelZoom()
-      instance.disablePan()
-      instance.disableZoom()
-
-      instance.center()
-      instance.fit()
-    } else {
+    if (enable) {
       instance.enableDblClickZoom()
       instance.enableMouseWheelZoom()
       instance.enablePan()
@@ -96,6 +88,14 @@ export const vSvgPanZoom = async function (el: SVGSVGElement, binding: Directive
 
       const callback = binding.value as InitCallback
       callback()
+    } else {
+      instance.disableDblClickZoom()
+      instance.disableMouseWheelZoom()
+      instance.disablePan()
+      instance.disableZoom()
+
+      instance.center()
+      instance.fit()
     }
   }
 

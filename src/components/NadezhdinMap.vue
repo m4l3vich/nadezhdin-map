@@ -113,7 +113,7 @@ function renderMap () {
         <span
           class="nadezhdin-map-hover__count"
           :class="hoverItem.percent >= 1 ? 'nadezhdin-map-hover__count_blue' : 'nadezhdin-map-hover__count_cyan'"
-          :style="{ opacity: hoverItem.percent }"
+          :style="{ opacity: hoverItem.percent + 0.1 }"
           v-text="hoverItem.count.toLocaleString('ru')"
         />
       </template>

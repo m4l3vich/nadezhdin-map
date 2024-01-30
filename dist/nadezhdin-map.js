@@ -214,7 +214,7 @@ const W = async function(i, e) {
 }, X = /* @__PURE__ */ n("ul", { class: "nadezhdin-map-legend" }, [
   /* @__PURE__ */ n("li", { class: "nadezhdin-map-legend__item nadezhdin-map-legend__item_blue" }, " 2500 и больше "),
   /* @__PURE__ */ n("li", { class: "nadezhdin-map-legend__item nadezhdin-map-legend__item_cyan" }, " Меньше 2500 "),
-  /* @__PURE__ */ n("li", { class: "nadezhdin-map-legend__item nadezhdin-map-legend__item_grey" }, " Нет ")
+  /* @__PURE__ */ n("li", { class: "nadezhdin-map-legend__item nadezhdin-map-legend__item_grey" }, " Нет штаба ")
 ], -1), q = ["textContent"], j = ["textContent"], J = /* @__PURE__ */ y({
   __name: "NadezhdinMap",
   props: {

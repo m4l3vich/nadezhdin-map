@@ -112,7 +112,7 @@ function renderMap () {
       </li>
 
       <li class="nadezhdin-map-legend__item nadezhdin-map-legend__item_grey">
-        Нет
+        Нет штаба
       </li>
     </ul>
 
@@ -147,7 +147,7 @@ function renderMap () {
 
   @media screen and (max-width: 960px) {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: 16px;
   }
 

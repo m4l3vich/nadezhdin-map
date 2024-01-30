@@ -71,13 +71,38 @@ export const vSvgPanZoom = async function (el: SVGSVGElement, binding: Directive
     }
   }
 
-  svgPanZoom(el, {
+  const instance = svgPanZoom(el, {
     zoomEnabled: true,
     fit: true,
     center: true,
     customEventsHandler: eventsHandler
   })
 
-  const callback = (binding.value as InitCallback)
-  callback()
+  function toggle (enable: boolean) {
+    if (hammer) hammer.set({ enable })
+    if (!enable) {
+      instance.disableDblClickZoom()
+      instance.disableMouseWheelZoom()
+      instance.disablePan()
+      instance.disableZoom()
+
+      instance.center()
+      instance.fit()
+    } else {
+      instance.enableDblClickZoom()
+      instance.enableMouseWheelZoom()
+      instance.enablePan()
+      instance.enableZoom()
+
+      const callback = binding.value as InitCallback
+      callback()
+    }
+  }
+
+  const media = window.matchMedia('(max-width: 960px)')
+  media.addEventListener('change', () => {
+    toggle(media.matches)
+  })
+
+  toggle(media.matches)
 }

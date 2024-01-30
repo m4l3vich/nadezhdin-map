@@ -27,7 +27,8 @@ function initObserver () {
     threshold: 0.9
   })
 
-  observer.observe(map.value.$el.querySelector('.svg-pan-zoom_viewport'))
+  const viewport = map.value.$el.querySelector('.svg-pan-zoom_viewport')
+  observer?.observe(viewport)
 }
 
 function observerCallback (entries: IntersectionObserverEntry[]) {

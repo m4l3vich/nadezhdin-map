@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import type { Region } from '../main'
 
 import MapSvg from '../assets/Map.svg'
@@ -20,21 +20,15 @@ const props = withDefaults(
 )
 
 watch(map, renderMap)
-onMounted(() => {
+
+function initObserver () {
   const observer = new IntersectionObserver(observerCallback, {
     root: root.value,
     threshold: 0.9
   })
 
-  watch(
-    map,
-    (val) => {
-      if (!val || !val.$el) return
-      observer.observe(val.$el.querySelector('.svg-pan-zoom_viewport'))
-    },
-    { immediate: true }
-  )
-})
+  observer.observe(map.value.$el.querySelector('.svg-pan-zoom_viewport'))
+}
 
 function observerCallback (entries: IntersectionObserverEntry[]) {
   showBorder.value = entries.some(e => !e.isIntersecting)
@@ -89,7 +83,7 @@ function renderMap () {
     :class="{ 'nadezhdin-map_show-border': showBorder }"
   >
     <MapSvg
-      v-svg-pan-zoom
+      v-svg-pan-zoom="initObserver"
       ref="map"
     />
 

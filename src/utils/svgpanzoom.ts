@@ -1,14 +1,23 @@
-export const vSvgPanZoom = function (el: any) {
-  // Not proud of typings here
+import { DirectiveBinding } from 'vue'
+
+type InitCallback = () => void
+
+async function getClientDependencies () {
+  const Hammer = (await import('hammerjs')).default
+  const svgPanZoom = (await import('svg-pan-zoom')).default
+
+  return { Hammer, svgPanZoom }
+}
+
+export const vSvgPanZoom = async function (el: SVGSVGElement, binding: DirectiveBinding) {
   if (typeof window === 'undefined') return
 
-  const Hammer = require('hammerjs')
-  const svgPanZoom = require('svg-pan-zoom')
+  const { Hammer, svgPanZoom } = await getClientDependencies()
 
   let hammer: HammerManager
-  const eventsHandler: any = {
+  const eventsHandler: SvgPanZoom.CustomEventHandler = {
     haltEventListeners: ['touchstart', 'touchend', 'touchmove', 'touchleave', 'touchcancel'],
-    init: function (options: any) {
+    init: function (options) {
       const instance = options.instance
       let initialScale = 1
       let pannedX = 0
@@ -54,7 +63,7 @@ export const vSvgPanZoom = function (el: any) {
       })
   
       // Prevent moving the page on some devices when panning over SVG
-      options.svgElement.addEventListener('touchmove', function (e: any) { e.preventDefault() })
+      options.svgElement.addEventListener('touchmove', function (e) { e.preventDefault() })
     },
   
     destroy: function () {
@@ -68,4 +77,7 @@ export const vSvgPanZoom = function (el: any) {
     center: true,
     customEventsHandler: eventsHandler
   })
+
+  const callback = (binding.value as InitCallback)
+  callback()
 }

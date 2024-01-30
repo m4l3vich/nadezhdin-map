@@ -1,0 +1,42 @@
+{
+  "name": "nadezhdin-map",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/nadezhdin-map.umd.cjs",
+  "module": "./dist/nadezhdin-map.js",
+  "exports": {
+    ".": {
+      "import": "./dist/nadezhdin-map.js",
+      "require": "./dist/nadezhdin-map.umd.cjs"
+    },
+    "./style.css": "./dist/style.css",
+    "./index.d.ts": "./dist/index.d.ts"
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "types": "vue-tsc",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "hammerjs": "^2.0.8",
+    "svg-pan-zoom": "^3.6.1",
+    "vue": "^3.3.11"
+  },
+  "devDependencies": {
+    "@types/hammerjs": "^2.0.45",
+    "@types/node": "^20.11.10",
+    "@vitejs/plugin-vue": "^4.5.2",
+    "sass": "^1.70.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vite-plugin-dts": "^3.7.2",
+    "vite-svg-loader": "^5.1.0",
+    "vue-tsc": "^1.8.25"
+  }
+}
